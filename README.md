@@ -51,3 +51,11 @@ Theseus and the Minotaur 라는 퍼즐 게임을 model checker 중 하나인 NuS
 ![2판경로](https://user-images.githubusercontent.com/52481037/93232703-27f91d00-f7b5-11ea-9c48-bf61e8100264.jpg)
 
 ![87판경로](https://user-images.githubusercontent.com/52481037/93232654-1ca5f180-f7b5-11ea-8113-e93ad2e7880d.jpg)
+
+## self evaluation
+
+- 이 과제를 해결할 때 가장 큰 걸림돌은 smv에 대한 이해와 적용이었다. 처음 본 언어와 프로그램를 사용하는 것이 처음에는 낯설었고, 어디서 부터 시작해야 할 지 막막했다. 
+하지만, 모델 체킹에 대하여 이해한 후 smv를 이용한 다른 예시도 직접해본 후 일사천리로 과제가 끝나게 되었다. 
+
+- 중간에 신기했던 것은 이산구조때 배웠던 finite-state model을 직접 구현해본 것과 turn이라는 변수가 운영체제에서의 semaphore의 개념을 비슷하게 사용한 것이다.
+운영체제와 전혀 관련없다고 생각했었지만, 생각보다 많은 곳에서 운영체제 개념이 쓰이는 것을 알고 신기했다.
