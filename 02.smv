@@ -1,0 +1,100 @@
+-- ���� : 02.lvl
+-- �� ũ��: 4  �� ũ��: 7
+-- �׼��콺��ġ: 203
+-- �̳�Ÿ����ġ: 201
+-- ����ġ      : 402
+MODULE main
+VAR
+--red : 테세우스, 999 : 탈출한 테세우스가 머무는 곳
+--black : 미노타우르스
+red: { 101, 102, 103, 104, 105, 106, 107, 201, 202, 203, 204, 205, 206, 207, 301, 302, 303, 304, 305, 306, 307, 401, 402, 403, 404, 405, 406, 407, 999 };
+black: { 101, 102, 103, 104, 105, 106, 107, 201, 202, 203, 204, 205, 206, 207, 301, 302, 303, 304, 305, 306, 307, 401, 402, 403, 404, 405, 406, 407 };
+turn : boolean;
+
+adir : {left,right,up,down};
+
+DEFINE
+notLeft := black=101 | black=201 | black=202 | black=203 | black=301 | black=306 | black=307 | black=401;
+notLeft_r := red=101 | red=201 | red=202 | red=203 | red=301 | red=306 | red=307 | red=401;
+-- fill here
+notRight := black=107 | black=207 | black=307 | black=407 | black=201 | black=202 | black=306 | black=305;
+notRight_r := red=107 | red=207 | red=307 | red=407 | red=201 | red=202 | red=306 |red=305;
+
+notUp := black=101 | black=102 | black=103 | black=104 | black=105 | black=106 | black=107 | black=302 | black=406;
+notUp_r := red=101 | red=102 | red=103 | red=104 | red=105 | red=106 | red=107 | red=302 | red=406;
+
+notDown := black=401 | black=402 | black=403 | black=404| black=405 | black=406 | black=407 | black=202 | black=306;
+notDown_r := red=401 | red=402 | red=403 | red=404| red=405 | red=406 | red=407 | red=202 | red=306;
+
+redStart := 203;
+redGoal := 402;
+blkStart := 201;
+
+ASSIGN
+init(turn) := TRUE;
+next(turn) := !turn;
+init(red) := redStart;
+-- fill here
+init(adir):={right,left,up,down};
+next(adir):={right,left,up,down};
+
+next(red) :=
+case
+  red=black : red; --잡히면 그냥 그 state에 계속 남아있어서 999못감
+  (turn=TRUE)&(red!=999) :
+    case
+      red=redGoal : 999; --잡히지 않고 goal로 갔을 경우 999로 감
+      (adir=left) & !notLeft_r : red - 1;
+      (adir=right) & !notRight_r : red + 1;
+      (adir=up) & !notUp_r: red - 100;
+      (adir=down) & !notDown_r: red + 100;
+      TRUE : red; --left,right,up,down못가는경우
+    esac;
+  TRUE : red; --turn이 false인경우
+esac;
+
+init(black) := blkStart;
+-- fill here
+--black은 turn과 상관없이 움직임
+next(black) :=
+case
+  ((black mod 100)-(next(red) mod 100) > 0) : --left 가야하는 경우
+  case
+    !notLeft : black - 1;
+    TRUE :
+    case
+      (black/100 - next(red)/100 > 0) & !notUp : black - 100;
+      (black/100 - next(red)/100 < 0) & !notDown : black + 100;
+      TRUE : black; --up,down못가는 경우
+    esac;
+  esac;
+
+  ((black mod 100)-(next(red) mod 100) < 0) : --right가야하는 경우
+  case
+    !notRight : black + 1;
+    TRUE :
+    case
+      (black/100 - next(red)/100 > 0) & !notUp : black - 100;
+      (black/100 - next(red)/100 < 0) & !notDown : black + 100;
+      TRUE : black; --up,down못가는 경우
+    esac;
+  esac;
+
+  (black mod 100)-(next(red) mod 100) = 0 : --위,아래만 가야하는 경우
+  case
+    (black - red > 0) & !notUp : black - 100;
+    (black - red < 0) & !notDown : black + 100;
+    black - red = 0: black; --black이 red를 따라잡음
+    TRUE : black; --up,down못가는 경우
+  esac;
+
+  TRUE : black; --left,right못가는 경우, black이 407이고 red가 999인경우(red가 도착한경우)
+esac;
+
+LTLSPEC -- fill here
+--red가 골인 지점에 도착 못하거나 미노타우르스가 태세우스를 따라잡을 때 인
+--state가 미래에 한번 있는 모든 경로가 있는지를 검사하면 그렇지 않은
+--즉, red가 골인지점에 도착하고 미노타우르스가 태세우스를 따라잡지 못하는 때에 false를 return하고
+--counterexample를 내놓을 것이라 이 것을 썼다.
+G(F((red != 999)|(red = black)))
+--!(!(red=black)U(red=999))
