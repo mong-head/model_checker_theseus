@@ -1,5 +1,5 @@
 # model_checker_theseus
-소프트웨어 공학 기말 과제 : 퍼즐게임을 model checker(smv)를 이용해서 자동으로 해결하는 프로그램 만들기
+퍼즐게임을 model checker(smv)를 이용해서 자동으로 해결하는 프로그램 만들기
 
 # 과제 설명
 
