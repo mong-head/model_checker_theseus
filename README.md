@@ -1,6 +1,6 @@
 # model_checker_theseus
 퍼즐게임을 model checker(smv)를 이용해서 자동으로 해결하는 프로그램 만들기 (2019.11)
-* 소프트웨어
+* 소프트웨어공학 과제
 
 # 과제 설명
 
